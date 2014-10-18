@@ -30,7 +30,7 @@ io.on('connection', function(socket){
 //io.emit('<functionname>', '<information>');
 
 function register(user, pass, group) {
-	db.users.save({name: user, pass: pass, group: group, points: 100}, function(err, saved) {
+	db.users.save({name: user, pass: pass, group: group, points: 100, jobs: [0]}, function(err, saved) {
 		if( err || !saved ) console.log("User not saved");
 		else console.log("User saved");
 	});
@@ -39,22 +39,25 @@ function register(user, pass, group) {
 function login(user, pass, group) {
 	//TODO: Change instances of name to user in this function and others (move job)
 	//login/register [add user to db]
-	db.users.find({name : user}, function(err, users) {
-		if( err || !users) {
+	console.log('login ' + group + ': ' + user + ',' + pass);
+	db.users.find({name : user}, function(err, theUsers) {
+		//console.log("something");
+		//console.log(theUsers.length);
+		if( err || !theUsers || theUsers.length == 0) {
 			//register
-			//io.emit('register', "No users found");
+			console.log("No users found");
+			register(user, pass, group);
 			console.log("Registering " + group + ":" + user + "," + pass);
-		} else users.forEach( function(user) {
+		} else theUsers.forEach( function(user) {
 			//login
 			//io.emit('addList', user.name + ': ' + user.description);
 			if (user.pass == pass) {
 				console.log("Logging in " + group + ":" + user.name + "," + pass);
-			}
-			else
+			} else {
 				console.log("Incorrect password/username combination");
+			}
 		});
 	});
-	console.log('login ' + group + ': ' + user + ',' + pass);
 }
 
 function viewJobs(isPublic) {

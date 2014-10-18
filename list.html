@@ -110,7 +110,7 @@ form {
 			return false;
 		  });
 		  $('#register').submit(function(){
-			socket.emit('register', $('#user').val(), $('#pass').val(), 0);
+			socket.emit('login', $('#user').val(), $('#pass').val(), 0);
 			return false;
 		  });
 		  socket.on('setSection', function(title){
