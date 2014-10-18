@@ -14,18 +14,19 @@
 		</div>
 		<div class="container">
 			<div id="header">Chore Board</div>
-			<ul class="menu">
+			<ul class="menu" id="section">
 				<li id="viewJobs">Chores</li>
 				<li style="float:right;" id="viewLeaderboard">Users</li>
 			</ul>
 			<div id="content">
-				<div class="chore" id="234234">
-					<span class="choreName">"MOP THE DISHES"</span>
-					<span class="choreDesc">ohaiyo</span>
-					<span class="ChoreAuthor">EXAMPLEMAN</span>
-					<span class="chorePoints">15</span>
+				<div class="chore" id="XXXXXX">
+					<div style="width: 70%; display: inline-block">
+						<span class="choreName">"MOP THE DISHES"</span>
+						<span class="choreDesc">"the dishes need mopped"</span>
+						<span class="ChoreAuthor">by: "EXAMPLEMAN"</span>
+					</div>
+					<span class="chorePoints">"15"</span>
 				</div>
-				<div id="list"></div>
 			</div>
 		</div>
 		<script src="/socket.io/socket.io.js"></script>
@@ -42,13 +43,13 @@
 		  });
 		  $('#login').submit(function(){
 			socket.emit('login', $('#user').val(), $('#pass').val());
-			//$('#user').val('');
-			//$('#pass').val('');
+			$('#user').val('');
+			$('#pass').val('');
 			return false;
 		  });
 		  socket.on('setSection', function(title){
-			$('#section').empty();
-			$('#section').append($('<li>').text(title));
+			$('#list').empty();
+			$('#list').append($('<li>').text(title));
 		  });
 		  socket.on('addList', function(element){
 			$('#list').append(element + '<br>');
