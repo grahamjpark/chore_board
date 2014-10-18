@@ -1,6 +1,9 @@
 var app = require('express')();
 var http = require('http').Server(app);
 var io = require('socket.io')(http);
+var databaseUrl = "data";
+var collections = ["publicChores", "privateChores", "users"];
+var db = require("mongojs").connect(databaseUrl, collections);
 
 app.get('/', function(req, res){
 	res.sendfile('list.html');
@@ -32,9 +35,19 @@ function viewJobs(isPublic) {
 	//view jobs (special | chores) [get jobs from db]
 	io.emit('clearList');
 	io.emit('setSection', isPublic ? 'Public' : 'Private');
+
+	//Determines which collection to look at
+	var p;
+	if (isPublic)
+		p = db.publicChores[0];
+	else
+		p = db.privateChores[0];
+
+	//Displays at most 4 of either job.
 	var i;
-	for (i = 0; i < 10; i++) {//i < public/private.length
-		io.emit('addList', 'ayy ' + isPublic + ' x' + i);//job properties
+	for (i = 0; p.hasNext() && i < 4; i++) {
+		io.emit('addList', p.next()); //TODO: Strip JSON
+		p = p.next();
 	}
 	console.log('view jobs public/private ' + isPublic);
 }
@@ -44,7 +57,7 @@ function viewLeaderboard() {
 	io.emit('clearList');
 	io.emit('setSection', 'Leaderboard');
 	var i;
-	for (i = 0; i < 10; i++) {//i < users.length
+	while (db.users.hasNext) {//i < users.length
 		io.emit('addList', 'ayy lmao x' + i);//user: points
 	}
 	console.log('view leaderboard');
