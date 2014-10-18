@@ -29,6 +29,7 @@ io.on('connection', function(socket){
 //io.emit('<functionname>', '<information>');
 
 function login(user, pass, group) {
+	//TODO: Change instances of name to user in this function and others (move job)
 	//login/register [add user to db]
 	db.users.find({name : user}, function(err, users) {//THIS DOESN'T WORK
 		if( err || !users) {
@@ -81,8 +82,28 @@ function viewLeaderboard() {
 	console.log('view leaderboard');
 }
 
-function movePrivate(job, bounty) {
+function movePrivate(job, bounty, user) {
+	// TODO: Can't test because i don't even UI
 	//move chores to special at a cost of points [set job.isSpecial, job.points, user.points]
+	db.privateChores.find({_id: job}, function(err, users) {
+		if( err || !users) {
+			io.emit('addList', "Job not found");
+			console.log("Job not found");
+		} else privateChores.forEach( function(chore) {
+			if (chore.name != user) {
+				console.log("You don't have privilege to post that chore.");
+			}
+			else {
+				publicChores.insert(chore);
+				privateChores.remove(chore); //This might have to have a different parameter
+				//TODO: Make changes to document. I'm not sure the difference
+				//		between public and private chores' set up
+			}
+
+			io.emit('addList', user.name + ': ' + user.points);
+			console.log(user.name + ': ' + user.points);
+		});
+	});
 	console.log('move private ' + job + ',' + bounty);
 }
 
