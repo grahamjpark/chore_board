@@ -7,13 +7,26 @@
 body {
 	background-color: #AAA;
 	background-image: url(brick-wall.jpg);
-	min-width: 500pt;
+	min-width: 400pt;
+	padding: 0px;
+	margin: 0px;
 	background-position: -40px -40px
 }
 
 form {
 	display: inline-block;
 }
+
+#loginBar {
+	background-color: #555;
+	right: 3vw;
+	display: inline-block;
+	position: fixed;
+	margin-top: 0px;
+	border-radius: 0px 0px 5pt 5pt;
+	padding: 5pt 5pt 0pt 5pt;
+}
+
 .container {
 
 	width: 100%;
@@ -41,12 +54,12 @@ form {
 	width: 50%;
 	text-align: center;
 	border-bottom: 2pt solid #14BDFF;
+	border-right: 1pt solid #AAA;
 	transition: background-color .2s;
 	-webkit-transition: background-color .2s;
 	-o-transition: background-color .2s;
 	-moz-transition: background-color .2s;
-	-ms-transition: background-color .2s;
-
+	-ms-transition: background-color .2s; 
 }
 
 .menu li:hover {
@@ -78,6 +91,13 @@ form {
 		</style>
 	</head>
 	<body>
+		<div id="loginBar">
+			<form id="login" action="">
+					<input id="user" placeholder="Username"/>
+					<input id="pass" autocomplete="off" type="password" placeholder="Password"/>
+					<button>Login</button>
+			</form>
+		</div>
 		<div class="container">
 			<div id="header">Chore Board</div>
 			<ul class="menu">
@@ -85,11 +105,6 @@ form {
 				<li style="float:right;">Personal</li>
 			</ul>
 			<div id="content">
-				<form id="login" action="">
-					<input id="user" autocomplete="off" value="Username"/>
-					<input id="pass" autocomplete="off" value="Password"/>
-					<button>Login</button>
-				</form>
 				<br>
 				<form id="viewPublicJobs" action=""><button>View Public Jobs</button></form>
 				<form id="viewPrivateJobs" action=""><button>View Private Jobs</button></form>
