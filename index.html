@@ -42,9 +42,7 @@
 			return false;
 		  });
 		  $('#login').submit(function(){
-			socket.emit('login', $('#user').val(), $('#pass').val());
-			$('#user').val('');
-			$('#pass').val('');
+			socket.emit('login', $('#user').val(), $('#pass').val(), 0);
 			return false;
 		  });
 		  socket.on('setSection', function(title){

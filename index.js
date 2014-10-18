@@ -13,7 +13,7 @@ app.get('/', function(req, res){
 
 io.on('connection', function(socket){
 	console.log('user connection');
-	socket.on('login', function(user, pass){login(user, pass);});
+	socket.on('login', function(user, pass, group){login(user, pass, group);});
 	socket.on('viewJobs', function(isPublic){viewJobs(isPublic);});
 	socket.on('viewLeaderboard', function(){viewLeaderboard();});
 	socket.on('movePrivate', function(job, bounty){movePrivate(job, bounty);});
@@ -28,9 +28,20 @@ io.on('connection', function(socket){
 //use the following to send things back to the index
 //io.emit('<functionname>', '<information>');
 
-function login(user, pass) {
+function login(user, pass, group) {
 	//login/register [add user to db]
-	console.log('login ' + user + ',' + pass);
+	db.users.find({user: user, pass: pass, group: group}, function(err, users) {//THIS DOESN'T WORK
+		if( err || !users) {
+			//register
+			//io.emit('register', "No users found");
+			console.log("Registering " + group + ":" + user + "," + pass);
+		} else users.forEach( function(user) {
+			//login
+			//io.emit('addList', user.name + ': ' + user.description);
+			console.log("Logging in " + group + ":" + user + "," + pass);
+		});
+	});
+	console.log('login ' + group + ': ' + user + ',' + pass);
 }
 
 function viewJobs(isPublic) {
