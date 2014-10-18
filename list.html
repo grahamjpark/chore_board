@@ -80,20 +80,9 @@ form {
 	<body>
 		<div class="container">
 			<div id="header">Chore Board</div>
-			<ul class="menu">
-				<li>Public</li>
-				<li style="float:right;">Personal</li>
-			</ul>
 			<div id="content">
-				<form id="login" action="">
-					<input id="user" autocomplete="off" value="Username"/>
-					<input id="pass" autocomplete="off" value="Password"/>
-					<button>Login</button>
-				</form>
-				<br>
-				<form id="viewPublicJobs" action=""><button>View Public Jobs</button></form>
-				<form id="viewPrivateJobs" action=""><button>View Private Jobs</button></form>
-				<form id="viewLeaderboard" action=""><button>View Leaderboard</button></form>
+				<ul id="list">
+				</ul>
 			</div>
 		</div>
 		<script src="/socket.io/socket.io.js"></script>
