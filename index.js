@@ -8,7 +8,7 @@ var db = require("mongojs").connect(databaseUrl, collections);
 app.use(require('express').static(__dirname +'/public'));
 
 app.get('/', function(req, res){
-	res.sendfile('index.html');
+	res.sendfile('list.html');
 });
 
 io.on('connection', function(socket){
@@ -37,20 +37,16 @@ function viewJobs(isPublic) {
 	//view jobs (special | chores) [get jobs from db]
 	io.emit('clearList');
 	io.emit('setSection', isPublic ? 'Public' : 'Private');
-
-	//Determines which collection to look at
-	var p;
-	if (isPublic)
-		p = db.publicChores[0];
-	else
-		p = db.privateChores[0];
-
-	//Displays at most 4 of either job.
-	var i;
-	for (i = 0; p.hasNext() && i < 4; i++) {
-		io.emit('addList', p.next()); //TODO: Strip JSON
-		p = p.next();
-	}
+	var p = isPublic ? db.publicChores : db.privateChores;
+	p.find({}, function(err, chores) {
+		if( err || !chores) {
+			io.emit('addList', "No chores found");
+			console.log("No chores found");
+		} else chores.forEach( function(chore) {
+			io.emit('addList', chore.name + ': ' + chore.description);
+			console.log(chore.name + ': ' + chore.description);
+		});
+	});
 	console.log('view jobs public/private ' + isPublic);
 }
 
@@ -58,10 +54,15 @@ function viewLeaderboard() {
 	//view leaderboard [get users from db]
 	io.emit('clearList');
 	io.emit('setSection', 'Leaderboard');
-	var i;
-	while (db.users.hasNext) {//i < users.length
-		io.emit('addList', 'ayy lmao x' + i);//user: points
-	}
+	db.users.find({}, function(err, users) {
+		if( err || !users) {
+			io.emit('addList', "No users found");
+			console.log("No users found");
+		} else users.forEach( function(user) {
+			io.emit('addList', user.name + ': ' + user.points);
+			console.log(user.name + ': ' + user.points);
+		});
+	});
 	console.log('view leaderboard');
 }
 
