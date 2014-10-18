@@ -81,3 +81,59 @@ form {
 	border: 1px solid black;
 	height: auto;
 }
+
+.chore {
+	width: 100%;
+	border-bottom: 1px solid #BBB;
+	display: inline-block;
+}
+
+.chore .choreName {
+	width: 100%;
+	font-size: 18pt;
+	margin-left: 5vw;
+	float: left;
+}
+
+.chore .choreDesc {
+	width: 100%;
+	font-size: 12pt;
+	margin-left: 5vw;
+	float: left;
+}
+.chore .choreAuthor {
+	width: 100%;
+	float: left;
+	font-size: 14pt;
+	color: #555555;
+	margin-left: 10vw;
+}
+.chore .chorePoints {
+	width: 30%;
+	display: inline-block;
+	font-size: 48pt;
+	float: right;
+	-webkit-box-sizing: border-box; /* Safari/Chrome, other WebKit */
+    -moz-box-sizing: border-box;    /* Firefox, other Gecko */
+    box-sizing: border-box;   
+}
+
+.user {
+	width: 100%;
+	border-bottom: 1px solid #BBB;
+	display: inline-block;
+}
+
+.user .userName {
+	width: 60%;
+	float: left;
+	font-family: Helvetica, Arial;
+	padding: 10px;
+	font-size: 24pt;
+}
+
+.user .userPoints {
+	width: 30%;
+	float: right;
+	font-size: 36pt;
+}
