@@ -27,7 +27,14 @@ io.on('connection', function(socket){
 //TODO: THESE FUNCTIONS
 //use the following to send things back to the index
 //io.emit('<functionname>', '<information>');
-
+/*
+function register(user, pass) {
+db.users.save({name: user, user.pass: pass, group: "male"}, function(err, saved) {
+  if( err || !saved ) console.log("User not saved");
+  else console.log("User saved");
+});
+}
+*/
 function login(user, pass, group) {
 	//TODO: Change instances of name to user in this function and others (move job)
 	//login/register [add user to db]
@@ -40,7 +47,7 @@ function login(user, pass, group) {
 			//login
 			//io.emit('addList', user.name + ': ' + user.description);
 			if (user.pass == pass) {
-				console.log("Logging in " + group + ":" + user + "," + pass);
+				console.log("Logging in " + group + ":" + user.name + "," + pass);
 			}
 			else
 				console.log("Incorrect password/username combination");
@@ -127,7 +134,7 @@ function bid(job, points) {
 			console.log("Job not found");
 		} else privateChores.forEach( function(chore) {
 				chore.points = chore.points + points;
-		}
+		});
 	});
 	console.log('bid ' + points + ' points to ' + job);
 }
@@ -145,10 +152,11 @@ function complete(job, user) {
 						console.log("Job not found");
 					} else privateChores.forEach( function(chore) {
 						worker.points += chore.points;
-					}
+					});
+				});
 			});
-		}
-	});
+		});
+	
 	console.log('complete ' + job);
 }
 
