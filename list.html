@@ -82,6 +82,10 @@ form {
 			<form id="viewPublicJobs" action=""><button>View Public Jobs</button></form>
 			<form id="viewPrivateJobs" action=""><button>View Private Jobs</button></form>
 			<form id="viewLeaderboard" action=""><button>View Leaderboard</button></form>
+			<form id="register" action="">
+					<input id="user" placeholder="Username"/>
+					<input id="pass" autocomplete="off" type="password" placeholder="Password"/>
+					<button>Login/Register</button></form>
 			<div id="header">Chore Board</div>
 			<ul class="menu" id="section"></ul>
 			<div id="content">
@@ -103,6 +107,10 @@ form {
 		  });
 		  $('#viewLeaderboard').submit(function(){
 			socket.emit('viewLeaderboard');
+			return false;
+		  });
+		  $('#register').submit(function(){
+			socket.emit('register', $('#user').val(), $('#pass').val(), 0);
 			return false;
 		  });
 		  socket.on('setSection', function(title){

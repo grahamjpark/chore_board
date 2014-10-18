@@ -8,11 +8,12 @@ var db = require("mongojs").connect(databaseUrl, collections);
 app.use(require('express').static(__dirname +'/public'));
 
 app.get('/', function(req, res){
-	res.sendfile('index.html');
+	res.sendfile('list.html');
 });
 
 io.on('connection', function(socket){
 	console.log('user connection');
+	socket.on('register', function(user, pass, group){register(user, pass, group);});
 	socket.on('login', function(user, pass, group){login(user, pass, group);});
 	socket.on('viewJobs', function(isPublic){viewJobs(isPublic);});
 	socket.on('viewLeaderboard', function(){viewLeaderboard();});
@@ -27,14 +28,14 @@ io.on('connection', function(socket){
 //TODO: THESE FUNCTIONS
 //use the following to send things back to the index
 //io.emit('<functionname>', '<information>');
-/*
-function register(user, pass) {
-db.users.save({name: user, user.pass: pass, group: "male"}, function(err, saved) {
-  if( err || !saved ) console.log("User not saved");
-  else console.log("User saved");
-});
+
+function register(user, pass, group) {
+	db.users.save({name: user, pass: pass, group: group, points: 100}, function(err, saved) {
+		if( err || !saved ) console.log("User not saved");
+		else console.log("User saved");
+	});
 }
-*/
+
 function login(user, pass, group) {
 	//TODO: Change instances of name to user in this function and others (move job)
 	//login/register [add user to db]
