@@ -40,7 +40,7 @@ function addJob(isPublic, group, id, jobName, username, desc, value) {
 }
 
 function register(user, pass, group) {
-	db.users.save({name: user, pass: pass, group: group, points: 100, jobs: [0]}, function(err, saved) {
+	db.users.save({username: user, password: pass, group: group, points: 100, jobs: []}, function(err, saved) {
 		if( err || !saved ) console.log("User not saved");
 		else console.log("User saved");
 	});
@@ -50,7 +50,7 @@ function login(user, pass, group) {
 	//TODO: Change instances of name to user in this function and others (move job)
 	//login/register [add user to db]
 	console.log('login ' + group + ': ' + user + ',' + pass);
-	db.users.find({name : user}, function(err, theUsers) {
+	db.users.find({username : user}, function(err, theUsers) {
 		//console.log("something");
 		//console.log(theUsers.length);
 		if( err || !theUsers || theUsers.length == 0) {
@@ -61,8 +61,8 @@ function login(user, pass, group) {
 		} else theUsers.forEach( function(user) {
 			//login
 			//io.emit('addList', user.name + ': ' + user.description);
-			if (user.pass == pass) {
-				console.log("Logging in " + group + ":" + user.name + "," + pass);
+			if (user.password == pass) {
+				console.log("Logging in " + group + ":" + user.username + "," + pass);
 			} else {
 				console.log("Incorrect password/username combination");
 			}
@@ -96,8 +96,8 @@ function viewLeaderboard() {
 			io.emit('addList', "No users found");
 			console.log("No users found");
 		} else users.forEach( function(user) {
-			io.emit('addList', user.name + ': ' + user.points);
-			console.log(user.name + ': ' + user.points);
+			io.emit('addList', user.username + ': ' + user.points);
+			console.log(user.username + ': ' + user.points);
 		});
 	});
 	console.log('view leaderboard');
@@ -106,7 +106,7 @@ function viewLeaderboard() {
 function movePrivate(job, bounty, user) {
 	//THIS IS CONCEPTUAL AND NEEDS TO BE REFINED AND TESTED
 	//move chores to special at a cost of points [set job.isSpecial, job.points, user.points]
-	db.privateChores.find({_id: job}, function(err, users) {
+	db.privateChores.find({ID: job}, function(err, users) {
 		if( err || !privateChores) {
 			io.emit('addList', "Job not found");
 			console.log("Job not found");
@@ -143,7 +143,7 @@ function bid(job, points) {
 	//THIS IS CONCEPTUAL AND NEEDS TO BE REFINED AND TESTED
 	//TODO: Test and update with current field names
 	//bid to special job
-	db.publicChores.find({_id: job}, function(err, chore) {
+	db.publicChores.find({ID: job}, function(err, chore) {
 		if( err || !publicChores) {
 			io.emit('addList', "Job not found");
 			console.log("Job not found");
@@ -157,12 +157,12 @@ function bid(job, points) {
 function complete(job, user) {
 	//THIS IS CONCEPTUAL AND NEEDS TO BE REFINED AND TESTED
 	//complete special jobs [set job.isVerifying]
-	db.users.find({name : user}, function(err, worker) {
+	db.users.find({username : user}, function(err, worker) {
 		if( err || !users) {
 				io.emit('addList', "User not found");
 				console.log("User not found");
 			} else privateChores.forEach( function(chore) {
-				db.publicChores.find({_id: job}, function(err, users) {
+				db.publicChores.find({ID: job}, function(err, users) {
 					if( err || !publicChores) {
 						io.emit('addList', "Job not found");
 						console.log("Job not found");
