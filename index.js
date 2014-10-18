@@ -30,7 +30,7 @@ io.on('connection', function(socket){
 
 function login(user, pass, group) {
 	//login/register [add user to db]
-	db.users.find({user: user, pass: pass, group: group}, function(err, users) {//THIS DOESN'T WORK
+	db.users.find({name : user}, function(err, users) {//THIS DOESN'T WORK
 		if( err || !users) {
 			//register
 			//io.emit('register', "No users found");
@@ -38,7 +38,11 @@ function login(user, pass, group) {
 		} else users.forEach( function(user) {
 			//login
 			//io.emit('addList', user.name + ': ' + user.description);
-			console.log("Logging in " + group + ":" + user + "," + pass);
+			if (user.pass == pass) {
+				console.log("Logging in " + group + ":" + user + "," + pass);
+			}
+			else
+				console.log("Incorrect password/username combination");
 		});
 	});
 	console.log('login ' + group + ': ' + user + ',' + pass);
