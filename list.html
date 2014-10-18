@@ -38,7 +38,7 @@ form {
     box-sizing: border-box;         /* Opera/IE 8+ */
 	margin: 0px;
 	padding: 0px;
-	width: 50%;
+	width: 100%;
 	text-align: center;
 	border-bottom: 2pt solid #14BDFF;
 	transition: background-color .2s;
@@ -79,7 +79,11 @@ form {
 	</head>
 	<body>
 		<div class="container">
+			<form id="viewPublicJobs" action=""><button>View Public Jobs</button></form>
+			<form id="viewPrivateJobs" action=""><button>View Private Jobs</button></form>
+			<form id="viewLeaderboard" action=""><button>View Leaderboard</button></form>
 			<div id="header">Chore Board</div>
+			<ul class="menu" id="section"></ul>
 			<div id="content">
 				<ul id="list">
 				</ul>
@@ -101,14 +105,15 @@ form {
 			socket.emit('viewLeaderboard');
 			return false;
 		  });
-		  $('#login').submit(function(){
-			socket.emit('login', $('#user').val(), $('#pass').val());
-			$('#user').val('');
-			$('#pass').val('');
-			return false;
+		  socket.on('setSection', function(title){
+			$('#section').empty();
+			$('#section').append($('<li>').text(title));
 		  });
-		  socket.on('chat message', function(msg){
-			$('#messages').append($('<li>').text(msg));
+		  socket.on('addList', function(element){
+			$('#list').append(element + '<br>');
+		  });
+		  socket.on('clearList', function(){
+			$('#list').empty();
 		  });
 		</script>
 	</body>

@@ -3,7 +3,7 @@ var http = require('http').Server(app);
 var io = require('socket.io')(http);
 
 app.get('/', function(req, res){
-	res.sendfile('index.html');
+	res.sendfile('list.html');
 });
 
 io.on('connection', function(socket){
@@ -30,11 +30,23 @@ function login(user, pass) {
 
 function viewJobs(isPublic) {
 	//view jobs (special | chores) [get jobs from db]
+	io.emit('clearList');
+	io.emit('setSection', isPublic ? 'Public' : 'Private');
+	var i;
+	for (i = 0; i < 10; i++) {//i < public/private.length
+		io.emit('addList', 'ayy ' + isPublic + ' x' + i);//job properties
+	}
 	console.log('view jobs public/private ' + isPublic);
 }
 
 function viewLeaderboard() {
 	//view leaderboard [get users from db]
+	io.emit('clearList');
+	io.emit('setSection', 'Leaderboard');
+	var i;
+	for (i = 0; i < 10; i++) {//i < users.length
+		io.emit('addList', 'ayy lmao x' + i);//user: points
+	}
 	console.log('view leaderboard');
 }
 
