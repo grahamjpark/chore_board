@@ -2,4 +2,8 @@
   "name": "chore_board",
   "version": "0.0.1",
   "description": "chore_board backend",
-  "dependencies": {}
+  "dependencies": {
+    "express": "^4.3.1",
+    "socket.io": "1.0.2"
+  }
+}
