@@ -19,7 +19,7 @@ io.on('connection', function(socket){
 	socket.on('addPrivateJob', function(isPublic, group, id, jobName, username, desc, value){addJob(false, isPublic, group, id, jobName, username, desc, value);});
 	socket.on('viewJobs', function(isPublic){viewJobs(isPublic);});
 	socket.on('viewLeaderboard', function(){viewLeaderboard();});
-	socket.on('movePrivate', function(job, bounty){movePrivate(job, bounty);});
+	socket.on('movePrivate', function(job, bounty, user){movePrivate(job, bounty, user);});
 	socket.on('submitBidJob', function(name, description, points){submitBidJob(name, description, points);});
 	socket.on('transferPoints', function(user, points){transferPoints(user, points);});
 	socket.on('bid', function(job, points){bid(job, points);});
@@ -33,9 +33,28 @@ io.on('connection', function(socket){
 
 function addJob(isPublic, group, id, jobName, username, desc, value) {
 	var p = isPublic ? db.publicChores : db.privateChores;
-	p.save({groupID: group, ID: id, name: jobName, user: username, description: desc, points: value, isVerifying: false, isDone: false}, function(err, saved) {
+	p.save({groupID: parseInt(group), ID: parseInt(id), name: jobName, user: username, description: desc, points: parseInt(value), isVerifying: false, isDone: false}, function(err, saved) {
 		if( err || !saved ) console.log("Job not saved");
-		else console.log("Job saved");
+		else {
+			console.log("Job saved");
+			if (!isPublic) {
+				giveJobToUser(username, id);
+			}
+		}
+	});
+}
+
+function giveJobToUser(user, id) {
+	db.users.update({username: user}, {$addToSet: {jobs: parseInt(id)}}, function(err, updated) {
+		if( err || !updated ) console.log("User jobs not updated");
+		else console.log("User jobs updated");
+	});
+}
+
+function moveJobFromUser(user, id, bounty) {
+	db.users.update({username: user}, {$inc: {points: -bounty}}, {$pullAll: {jobs: parseInt(id)}}, function(err, updated) {
+		if( err || !updated ) console.log("User jobs not updated");
+		else console.log("User jobs updated");
 	});
 }
 
