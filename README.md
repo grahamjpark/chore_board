@@ -1,4 +1,4 @@
 chore_board
 ===========
 
-More to come for chore
+Chore to come
