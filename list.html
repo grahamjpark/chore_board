@@ -92,6 +92,7 @@ form {
 			<input id="jobuser" placeholder="Job User"/>
 			<input id="jobdesc" placeholder="Job Description"/>
 			<form id="addPriJob" action=""><button>Add Private job</button></form>
+			<form id="debug" action=""><button>Debug</button></form>
 			<form id="addPubJob" action=""><button>Add Public job</button></form>
 			<div id="header">Chore Board</div>
 			<ul class="menu" id="section"></ul>
@@ -118,6 +119,10 @@ form {
 		  });
 		  $('#register').submit(function(){
 			socket.emit('login', $('#user').val(), $('#pass').val(), 0);
+			return false;
+		  });
+		  $('#debug').submit(function(){
+			socket.emit('movePrivate', 0, 5, "ab");
 			return false;
 		  });
 		  $('#addPriJob').submit(function(){

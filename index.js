@@ -2,7 +2,7 @@ var app = require('express')();
 var http = require('http').Server(app);
 var io = require('socket.io')(http);
 var databaseUrl = "data";
-var collections = ["publicChores", "privateChores", "users"];
+var collections = ["chores", "users"];
 var db = require("mongojs").connect(databaseUrl, collections);
 
 app.use(require('express').static(__dirname +'/public'));
@@ -32,8 +32,8 @@ io.on('connection', function(socket){
 //io.emit('<functionname>', '<information>');
 
 function addJob(isPublic, group, id, jobName, username, desc, value) {
-	var p = isPublic ? db.publicChores : db.privateChores;
-	p.save({groupID: group, ID: id, name: jobName, user: username, description: desc, points: value, isVerifying: false, isDone: false}, function(err, saved) {
+	var p = db.chores;
+	p.save({groupID: group, ID: id, name: jobName, user: username, description: desc, points: value, isVerifying: false, isDone: false, isPublic: isPublic}, function(err, saved) {
 		if( err || !saved ) console.log("Job not saved");
 		else console.log("Job saved");
 	});
@@ -74,8 +74,7 @@ function viewJobs(isPublic) {
 	//view jobs (special | chores) [get jobs from db]
 	io.emit('clearList');
 	io.emit('setSection', isPublic ? 'Public' : 'Private');
-	var p = isPublic ? db.publicChores : db.privateChores;
-	p.find({}, function(err, chores) {
+	db.chores.find({isPublic: isPublic}, function(err, chores) {
 		if( err || !chores) {
 			io.emit('addList', "No chores found");
 			console.log("No chores found");
@@ -104,27 +103,49 @@ function viewLeaderboard() {
 }
 
 function movePrivate(job, bounty, user) {
+	console.log(typeof user);
+	console.log(typeof username);
 	//THIS IS CONCEPTUAL AND NEEDS TO BE REFINED AND TESTED
 	//move chores to special at a cost of points [set job.isSpecial, job.points, user.points]
-	db.privateChores.find({ID: job}, function(err, users) {
-		if( err || !privateChores) {
+	db.chores.find({ID: job, isPublic: false}, function(err, chore) {
+		if( err || !chore) {
 			io.emit('addList', "Job not found");
 			console.log("Job not found");
-		} else privateChores.forEach( function(chore) {
-			if (chore.name != user) {
+		} else {
+			if (chore.user != user) {
 				console.log("You don't have privilege to post that chore.");
 			}
 			else {
-				publicChores.insert(chore);
-				privateChores.remove(chore); //This might have to have a different parameter
-				//TODO: Make changes to document. I'm not sure the difference
-				//		between public and private chores' set up
+				// db.users.update({}, {$inc:{points : 1}}, { multi: true });
+				collection = db.collection("chores");
+				collection.update(
+					{ID: job.toString()}, 
+					{
+						$set: {isPublic: true}, 
+						$inc: {points: bounty}
+					},
+					{ multi: true }
+				, 
+				function(err, result) {console.log(err);console.log(result)});
+				
+				collection2 = db.collection("users");
+				collection2.update(
+					{username:"a" }, //THIS SHOULD BE USER BUT IT DOESN"T WORK! HELP JOHN
+					{$inc:
+						{points : -bounty}
+					}, 
+					{ multi: true }
+				, 
+				function(err, result) {console.log(err);console.log(result)});
+				// /*var i = poster.jobs.indexOf(job);
+				// if (i > -1)
+				// 	poster.jobs.splice(i, 1);*/
 			}
-
+			console.log('move private ' + job + ',' + bounty);
 			//TODO: Make list refresh?? Is that a thing?
-		});
+		}
 	});
-	console.log('move private ' + job + ',' + bounty);
+	
 }
 
 function submitBidJob(name, description, points) {
