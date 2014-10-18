@@ -4,7 +4,8 @@ body {
 	min-width: 400pt;
 	padding: 0px;
 	margin: 0px;
-	background-position: -40px -40px
+	background-position: -40px -40px;
+	font-family: Helvetica, Arial;
 }
 
 form {
@@ -86,22 +87,34 @@ form {
 	width: 100%;
 	border-bottom: 1px solid #BBB;
 	display: inline-block;
+	transition: all .1s;
+	-webkit-transition: all .1s;
+	-o-transition: all .1s;
+	-ms-transition: all .1s;
+	-moz-transition: all .1s;
 }
+.chore:hover {
+	background-color: rgba(255,255,255,.3);
+}
+
 
 .chore .choreName {
 	width: 100%;
+	display: block;
 	font-size: 18pt;
 	margin-left: 5vw;
 	float: left;
 }
 
 .chore .choreDesc {
+	display: block;
 	width: 100%;
 	font-size: 12pt;
 	margin-left: 5vw;
 	float: left;
 }
 .chore .choreAuthor {
+	display: block;
 	width: 100%;
 	float: left;
 	font-size: 14pt;
@@ -113,6 +126,7 @@ form {
 	display: inline-block;
 	font-size: 48pt;
 	float: right;
+	text-align: center;
 	-webkit-box-sizing: border-box; /* Safari/Chrome, other WebKit */
     -moz-box-sizing: border-box;    /* Firefox, other Gecko */
     box-sizing: border-box;   
@@ -122,6 +136,15 @@ form {
 	width: 100%;
 	border-bottom: 1px solid #BBB;
 	display: inline-block;
+	transition: all .1s;
+	-webkit-transition: all .1s;
+	-o-transition: all .1s;
+	-ms-transition: all .1s;
+	-moz-transition: all .1s;
+}
+
+.user:hover {
+	background-color: rgba(255,255,255,.3);
 }
 
 .user .userName {
@@ -130,10 +153,73 @@ form {
 	font-family: Helvetica, Arial;
 	padding: 10px;
 	font-size: 24pt;
+	margin-left: 5vw;
 }
 
 .user .userPoints {
 	width: 30%;
 	float: right;
 	font-size: 36pt;
+	text-align: center;
+}
+
+.addEntry {
+	font-size: 44pt;
+	color: #999;
+	width: 100%;
+	text-align: center;
+	border-bottom: 1px solid #BBB;
+}
+
+#addBox {
+	display: none;
+	-webkit-box-sizing: border-box; /* Safari/Chrome, other WebKit */
+    -moz-box-sizing: border-box;    /* Firefox, other Gecko */
+    box-sizing: border-box;   
+	border-bottom: 1px solid #BBB;
+	width: 100%;
+	padding: 1.5%;
+}
+
+#addBox input {
+	width: 32%;
+	height: 24pt;
+	font-size: 16pt;
+	border: none;
+	background-color: none;
+	color: none;
+}
+
+#jobDesc {
+	width: 50%;
+}
+
+#jobPoints {
+	width: 14%;
+	text-align: center;
+}
+
+#addBox .button {
+	-webkit-box-sizing: border-box; /* Safari/Chrome, other WebKit */
+    -moz-box-sizing: border-box;    /* Firefox, other Gecko */
+    box-sizing: border-box;   
+	width: 48.25%;
+	display: inline-block;
+	text-align: center;
+	margin-top: 5pt;
+	padding: 15px 0pt;
+	background-color: white;
+	transition: background-color .1s;
+	-webkit-transition: background-color .1s;
+	-o-transition: background-color .1s;
+	-moz-transition: background-color .1s;
+	-ms-transition: background-color .1s; 
+}
+#addBox .button:hover {
+	background-color: #14BDFF;
+}
+
+#addBox .button:active {
+	background-color: white;
+
 }

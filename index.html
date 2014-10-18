@@ -3,6 +3,13 @@
 		<title>Welcome to Chore-Board</title>
 		<link rel="stylesheet" type="text/css" href="/css/master.css">
 		<link href='http://fonts.googleapis.com/css?family=Pacifico' rel='stylesheet' type='text/css'>
+		<script>
+		var groupid= 3334343
+		function revealAdd(){
+			$('#addBox').slideDown("slow");
+			$('#addEntry').slideUp("slow");
+		}
+		</script>
 	</head>
 	<body>
 		<div id="loginBar">
@@ -20,25 +27,54 @@
 			</ul>
 			<div id="content">
 				<div class="chore" id="XXXXXX">
-					<div style="width: 70%; display: inline-block">
-						<span class="choreName">"MOP THE DISHES"</span>
-						<span class="choreDesc">"the dishes need mopped"</span>
-						<span class="ChoreAuthor">by: "EXAMPLEMAN"</span>
+					<div class="ChoreOverlay">
+						<div 
 					</div>
-					<span class="chorePoints">"15"</span>
-				</div>
 
+					<div style="width: 70%; display: inline-block">
+						<span class="choreName" id="XXXXXXname">"MOP THE DISHES"</span>
+						<span id="XXXXXXdesc" class="choreDesc">"the dishes need mopped"</span>
+						<span id="XXXXXXauth"class="ChoreAuthor">by: "EXAMPLEMAN"</span>
+					</div>
+					<span class="chorePoints" id="XXXXXXpoints">"15"</span>
+				</div>
+				
 				<div class="user" id="XXXXXX">
-					<div style="width: 60%; display: inline-block" class="userName">
+					<div style="width: 60%; display: inline-block" class="userName" id="nameXXXXXX">
 						EXAMPLEMAN
 					</div>
-					<span class="userPoints">"150"</span>
+					<span class="userPoints" id="pointsXXXXXX">"150"</span>
+				</div>
+				
+				<div id="addBox">
+					<input id="jobname" placeholder="Job Name"/>
+					<input id="jobdesc" style="width: 50%" placeholder="Job Description"/>
+					<input id="jobPoints" style="width: 14%" placeholder="Points"/>	
+					<div id="addPrivJob" class="button">Add Private Job</div>
+					<div id="addPubJob" class="button">Add Public Job</div>
+				</div>
+
+				<div class="addEntry" id="addEntry">
+					+ADD
 				</div>
 			</div>
 		</div>
 		<script src="/socket.io/socket.io.js"></script>
     	<script src="http://code.jquery.com/jquery-1.11.1.js"></script>
 		<script>
+		$('#addEntry').click(function(){
+			revealAdd();
+			return false;
+		});
+		$('#addPubJob').click(function(){
+			socket.emit('addPubJob',false,groupid,$('#jobname').value,user,$('jobdesc'), $('jobPoints'));
+			return false;
+		});
+		$('#addPrivJob').click(function(){
+			socket.emit('addPubJob',true,groupid,$('#jobname').value,user,$('jobdesc'), $('jobPoints'));
+			return false;
+		});
+
 		  var socket = io();
 		  $('#viewJobs').click(function(){
 			socket.emit('viewJobs', true);
