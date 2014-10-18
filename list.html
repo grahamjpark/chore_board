@@ -82,18 +82,22 @@ form {
 			<form id="viewPublicJobs" action=""><button>View Public Jobs</button></form>
 			<form id="viewPrivateJobs" action=""><button>View Private Jobs</button></form>
 			<form id="viewLeaderboard" action=""><button>View Leaderboard</button></form>
+			<br>
 			<form id="register" action="">
 				<input id="user" placeholder="Username"/>
 				<input id="pass" autocomplete="off" type="password" placeholder="Password"/>
 				<button>Login/Register</button>
 			</form>
+			<br>
 			<input id="jobid" placeholder="0"/>
 			<input id="jobname" placeholder="Job Name"/>
 			<input id="jobuser" placeholder="Job User"/>
 			<input id="jobdesc" placeholder="Job Description"/>
-			<form id="addPriJob" action=""><button>Add Private job</button></form>
 			<form id="debug" action=""><button>Debug</button></form>
 			<form id="addPubJob" action=""><button>Add Public job</button></form>
+			<form id="addPriJob" action=""><button>Add Private Job</button></form>
+			<br>
+			<form id="movePrivate" action=""><button>Move Private Job</button></form>
 			<div id="header">Chore Board</div>
 			<ul class="menu" id="section"></ul>
 			<div id="content">
@@ -123,6 +127,8 @@ form {
 		  });
 		  $('#debug').submit(function(){
 			socket.emit('movePrivate', 0, 5, "ab");
+		  $('#movePrivate').submit(function(){
+			socket.emit('movePrivate', 0, 10, 'graham');
 			return false;
 		  });
 		  $('#addPriJob').submit(function(){
