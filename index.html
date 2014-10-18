@@ -64,8 +64,6 @@ body {
 	text-align: center;
 }
 		</style>
-		<script src="/socket.io/socket.io.js"></script>
-    	<script src="http://code.jquery.com/jquery-1.11.1.js"></script>
 	</head>
 	<body>
 		<div class="container">
@@ -75,12 +73,42 @@ body {
 				<li style="float:right;">Personal</li>
 			</ul>
 			<div id="content">
-				<form action="">
-					<input id="testinput" autocomplete="off" /><button id="testbutt">THINGS</button>
-					<button id="lolbutt">STUFF</button>
-					<button id="capsbutt">caps</button>
+				<form id="login" action="">
+					<input id="user" autocomplete="off" value="Username"/>
+					<input id="pass" autocomplete="off" value="Password"/>
+					<button>Login</button>
 				</form>
+				<br>
+				<form id="viewPublicJobs" action=""><button>View Public Jobs</button></form>
+				<form id="viewPrivateJobs" action=""><button>View Private Jobs</button></form>
+				<form id="viewLeaderboard" action=""><button>View Leaderboard</button></form>
 			</div>
 		</div>
+		<script src="/socket.io/socket.io.js"></script>
+    	<script src="http://code.jquery.com/jquery-1.11.1.js"></script>
+		<script>
+		  var socket = io();
+		  $('#viewPublicJobs').submit(function(){
+			socket.emit('viewJobs', true);
+			return false;
+		  });
+		  $('#viewPrivateJobs').submit(function(){
+			socket.emit('viewJobs', false);
+			return false;
+		  });
+		  $('#viewLeaderboard').submit(function(){
+			socket.emit('viewLeaderboard');
+			return false;
+		  });
+		  $('#login').submit(function(){
+			socket.emit('login', $('#user').val(), $('#pass').val());
+			$('#user').val('');
+			$('#pass').val('');
+			return false;
+		  });
+		  socket.on('chat message', function(msg){
+			$('#messages').append($('<li>').text(msg));
+		  });
+		</script>
 	</body>
 </html>
