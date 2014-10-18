@@ -8,7 +8,7 @@ var db = require("mongojs").connect(databaseUrl, collections);
 app.use(require('express').static(__dirname +'/public'));
 
 app.get('/', function(req, res){
-	res.sendfile('list.html');
+	res.sendfile('index.html');
 });
 
 io.on('connection', function(socket){
