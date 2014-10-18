@@ -83,7 +83,7 @@ function viewLeaderboard() {
 }
 
 function movePrivate(job, bounty, user) {
-	// TODO: Can't test because i don't even UI
+	//THIS IS CONCEPTUAL AND NEEDS TO BE REFINED AND TESTED
 	//move chores to special at a cost of points [set job.isSpecial, job.points, user.points]
 	db.privateChores.find({_id: job}, function(err, users) {
 		if( err || !privateChores) {
@@ -119,6 +119,7 @@ function transferPoints(user, points) {
 }
 
 function bid(job, points) {
+	//THIS IS CONCEPTUAL AND NEEDS TO BE REFINED AND TESTED
 	//TODO: Test and update with current field names
 	//bid to special job
 	db.publicChores.find({_id: job}, function(err, chore) {
@@ -133,6 +134,7 @@ function bid(job, points) {
 }
 
 function complete(job, user) {
+	//THIS IS CONCEPTUAL AND NEEDS TO BE REFINED AND TESTED
 	//complete special jobs [set job.isVerifying]
 	db.users.find({name : user}, function(err, worker) {
 		if( err || !users) {
