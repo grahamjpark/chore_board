@@ -31,7 +31,7 @@ io.on('connection', function(socket){
 function login(user, pass, group) {
 	//TODO: Change instances of name to user in this function and others (move job)
 	//login/register [add user to db]
-	db.users.find({name : user}, function(err, users) {//THIS DOESN'T WORK
+	db.users.find({name : user}, function(err, users) {
 		if( err || !users) {
 			//register
 			//io.emit('register', "No users found");
@@ -86,7 +86,7 @@ function movePrivate(job, bounty, user) {
 	// TODO: Can't test because i don't even UI
 	//move chores to special at a cost of points [set job.isSpecial, job.points, user.points]
 	db.privateChores.find({_id: job}, function(err, users) {
-		if( err || !users) {
+		if( err || !privateChores) {
 			io.emit('addList', "Job not found");
 			console.log("Job not found");
 		} else privateChores.forEach( function(chore) {
@@ -100,8 +100,7 @@ function movePrivate(job, bounty, user) {
 				//		between public and private chores' set up
 			}
 
-			io.emit('addList', user.name + ': ' + user.points);
-			console.log(user.name + ': ' + user.points);
+			//TODO: Make list refresh?? Is that a thing?
 		});
 	});
 	console.log('move private ' + job + ',' + bounty);
@@ -120,12 +119,36 @@ function transferPoints(user, points) {
 }
 
 function bid(job, points) {
+	//TODO: Test and update with current field names
 	//bid to special job
+	db.publicChores.find({_id: job}, function(err, chore) {
+		if( err || !publicChores) {
+			io.emit('addList', "Job not found");
+			console.log("Job not found");
+		} else privateChores.forEach( function(chore) {
+				chore.points = chore.points + points;
+		}
+	});
 	console.log('bid ' + points + ' points to ' + job);
 }
 
-function complete(job) {
+function complete(job, user) {
 	//complete special jobs [set job.isVerifying]
+	db.users.find({name : user}, function(err, worker) {
+		if( err || !users) {
+				io.emit('addList', "User not found");
+				console.log("User not found");
+			} else privateChores.forEach( function(chore) {
+				db.publicChores.find({_id: job}, function(err, users) {
+					if( err || !publicChores) {
+						io.emit('addList', "Job not found");
+						console.log("Job not found");
+					} else privateChores.forEach( function(chore) {
+						worker.points += chore.points;
+					}
+			});
+		}
+	});
 	console.log('complete ' + job);
 }
 
