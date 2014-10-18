@@ -15,6 +15,8 @@ io.on('connection', function(socket){
 	console.log('user connection');
 	socket.on('register', function(user, pass, group){register(user, pass, group);});
 	socket.on('login', function(user, pass, group){login(user, pass, group);});
+	socket.on('addPublicJob', function(isPublic, group, id, jobName, username, desc, value){addJob(true, isPublic, group, id, jobName, username, desc, value);});
+	socket.on('addPrivateJob', function(isPublic, group, id, jobName, username, desc, value){addJob(false, isPublic, group, id, jobName, username, desc, value);});
 	socket.on('viewJobs', function(isPublic){viewJobs(isPublic);});
 	socket.on('viewLeaderboard', function(){viewLeaderboard();});
 	socket.on('movePrivate', function(job, bounty){movePrivate(job, bounty);});
@@ -28,6 +30,14 @@ io.on('connection', function(socket){
 //TODO: THESE FUNCTIONS
 //use the following to send things back to the index
 //io.emit('<functionname>', '<information>');
+
+function addJob(isPublic, group, id, jobName, username, desc, value) {
+	var p = isPublic ? db.publicChores : db.privateChores;
+	p.save({groupID: group, ID: id, name: jobName, user: username, description: desc, points: value, isVerifying: false, isDone: false}, function(err, saved) {
+		if( err || !saved ) console.log("Job not saved");
+		else console.log("Job saved");
+	});
+}
 
 function register(user, pass, group) {
 	db.users.save({name: user, pass: pass, group: group, points: 100, jobs: [0]}, function(err, saved) {
