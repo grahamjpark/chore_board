@@ -83,8 +83,8 @@ function login(socket, user, pass, group) {
 
 function viewJobs(socket, isPublic) {
 	//view jobs (special | chores) [get jobs from db]
-	io.emit('clearList');
-	io.emit('setSection', isPublic ? 'Public' : 'Private');
+	socket.emit('clearList');
+	socket.emit('setSection', isPublic ? 'Public' : 'Private');
 	db.chores.find({isPublic: isPublic}, function(err, chores) {
 		if( err || !chores) {
 			socket.emit('addList', "No chores found");
