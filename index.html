@@ -4,11 +4,23 @@
 		<link rel="stylesheet" type="text/css" href="/css/master.css">
 		<link href='http://fonts.googleapis.com/css?family=Pacifico' rel='stylesheet' type='text/css'>
 		<script>
-		var groupid= 3334343
+		var groupid = 0;
+		var username;
+
 		function revealAdd(){
 			$('#addBox').slideDown("slow");
 			$('#addEntry').slideUp("slow");
 		}
+
+		function goodLogin(){
+			username = $('#user').value;
+			$('loginBar').html = "Welcome, " + username;
+		}
+
+		function badLogin() {
+			alert("Incorrect login");
+		}
+
 		</script>
 	</head>
 	<body>
@@ -26,30 +38,15 @@
 				<li style="float:right;" id="viewLeaderboard">Users</li>
 			</ul>
 			<div id="content">
-				<div class="chore" id="XXXXXX">
-
-					<div style="width: 70%; display: inline-block">
-						<span class="choreName" id="XXXXXXname">"MOP THE DISHES"</span>
-						<span id="XXXXXXdesc" class="choreDesc">"the dishes need mopped"</span>
-						<span id="XXXXXXauth"class="ChoreAuthor">by: "EXAMPLEMAN"</span>
-					</div>
-					<span class="chorePoints" id="XXXXXXpoints">"15"</span>
+				<h2>Personal</h2>
+				<div id="privates">
+					
 				</div>
-				
-				<div class="user" id="XXXXXX">
-					<div style="width: 60%; display: inline-block" class="userName" id="nameXXXXXX">
-						EXAMPLEMAN
-					</div>
-					<span class="userPoints" id="pointsXXXXXX">"150"</span>
+				<h2>Public:</h2>
+				<div id="publics">
+					
 				</div>
-
-				<div class="user" id="YYYYYY">
-					<div style="width: 60%; display: inline-block" class="userName" id="nameYYYYYY">
-						EXAMPLEMAN
-					</div>
-					<span class="userPoints" id="pointsYYYYYY">"150"</span>
-				</div>
-				
+			</div>
 				<div id="addBox">
 					<input id="jobname" placeholder="Job Name"/>
 					<input id="jobdesc" style="width: 50%" placeholder="Job Description"/>
@@ -79,8 +76,8 @@
 			return false;
 		});
 		$(document).on('click', '.user',function(){
-			$("#choreOverlay").remove();
-			$("<div id='choreOverlay'><input id='transferInput' placeholder='Points' /><div id='transferButton'>Transfer</div></div>").appendTo(this).hide().slideDown();
+			$("#userOverlay").remove();
+			$("<div id='userOverlay'><input id='transferInput' placeholder='Points' /><div id='transferButton'>Transfer</div></div>").appendTo(this).hide().slideDown();
 		});
 
 		$(document).on('click','#transferInput',function(evt){
@@ -90,19 +87,63 @@
 		$(document).on('click','#transferButton',function(evt){
 			evt.stopPropagation();
 		});
+
+		$(document).on('click', '.chore',function(){
+			$("#choreOverlay").remove();
+			$("<div id='choreOverlay'><div id='choreFinish'>Finish</div><div id='makePublic'>Make Public</div>").appendTo(this).hide().slideDown();
+		});
+		$(document).on('click', '.chore',function(){
+			$("#choreOverlay").remove();
+			$("<div id='choreOverlay'> <div id='choreFinish'>Finish</div><input id='bidInput' placeholder='Bid' /><div id='makeBid'>Bid</div></div>").appendTo(this).hide().slideDown();
+		});
+
+		$(document).on('click','#makeBid',function(evt){
+			evt.stopPropagation();
+		});
+
+		$(document).on('click','#bidInput',function(evt){
+			evt.stopPropagation();
+		});
+
+		$(document).on('click','#makePublic',function(evt){
+			evt.stopPropagation();
+		});
+
+		$(document).on('click','#choreFinish',function(evt){
+			evt.stopPropagation();
+		});
 		  var socket = io();
 		  $('#viewJobs').click(function(){
 			socket.emit('viewJobs', true);
+			$('#content').empty();
+			$('#content').append("<h2>Personal</h2><div id='privates'></div><h2>Public:</h2><div id='publics'></div>");
 			return false;
 		  });
 		  $('#viewLeaderboard').click(function(){
 			socket.emit('viewLeaderboard');
+			$('#content').empty();
 			return false;
 		  });
 		  $('#login').submit(function(){
 			socket.emit('login', $('#user').val(), $('#pass').val(), 0);
 			return false;
 		  });
+		  socket.on('viewJobs', function(name, description, points, isDone, isPublic) {
+		  	if(!isDone){
+		  		if(isPublic){
+		  			$('#publics').append("<div class='chore' id='XXXXXX'><div style='width: 70%; display: inline-block'><span class='choreName'>" + name + "</span><span class='choreDesc'>" + description + "</span></div><span class='chorePoints'>" + points + "</span></div>");
+		  		}
+		  		else{
+		  			$('#privates').append("<div class='chore' id='XXXXXX'><div style='width: 70%; display: inline-block'><span class='choreName'>" + name + "</span><span class='choreDesc'>" + description + "</span></div><span class='chorePoints'>" + points + "</span></div>");
+		  		}
+		  	}
+		  });
+
+		  socket.on('viewLeaderboard', function(title, user, points){
+			
+			$('#content').append("<div class='user'><div style='width: 60%; display: inline-block' class='userName'>" + user + "</div><span class='userPoints'>" + points + "</span></div>");
+		  });
+
 		  socket.on('setSection', function(title){
 			$('#list').empty();
 			$('#list').append($('<li>').text(title));
@@ -111,7 +152,9 @@
 			$('#list').append(element + '<br>');
 		  });
 		  socket.on('clearList', function(){
-			$('#list').empty();
+			$('#publics').empty();
+		  	$('#privates').empty();
+
 		  });
 		</script>
 	</body>

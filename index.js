@@ -13,7 +13,7 @@ var client = require('twilio')(accountSid, authToken);
 app.use(require('express').static(__dirname +'/public'));
 
 app.get('/', function(req, res){
-	res.sendfile('list.html');
+	res.sendfile('index.html');
 });
 
 io.on('connection', function(socket){
@@ -94,7 +94,7 @@ function viewJobs(socket, isPublic) {
 			socket.emit('addList', "No chores found");
 			console.log("No chores found");
 		} else chores.forEach( function(chore) {
-			socket.emit('viewJobs', chore.name, chore.description, chore.points, chore.isDone); //TODO:
+			socket.emit('viewJobs', chore.name, chore.description, chore.points, chore.isDone, isPublic); //TODO:
 			//socket.emit('addList', chore.name + ': ' + chore.description);
 			console.log(chore.name + ': ' + chore.description);
 		});

@@ -1,6 +1,6 @@
 body {
 	background-color: #AAA;
-	background-image: url(../brick-wall.jpg);
+	background-image: url(../small_steps.png);
 	min-width: 400pt;
 	padding: 0px;
 	margin: 0px;
@@ -61,17 +61,15 @@ form {
 }
 
 #content{
-	padding: 1%;
 	-webkit-box-sizing: border-box; /* Safari/Chrome, other WebKit */
     -moz-box-sizing: border-box;    /* Firefox, other Gecko */
     box-sizing: border-box;         /* Opera/IE 8+ */
 	width: 100%;
-	height: 500pt;
 	background-color: rgba(255,255,255,.6);
 }
 
 #header {
-	color: white;
+	color: black;
 	font-family: Pacifico, script;
 	font-size: 15vmin;
 	text-align: center;
@@ -179,6 +177,15 @@ form {
 	border-bottom: 1px solid #BBB;
 	width: 100%;
 	padding: 1.5%;
+	transition: background-color .2s;
+	-webkit-transition: background-color .2s;
+	-o-transition: background-color .2s;
+	-moz-transition: background-color .2s;
+	-ms-transition: background-color .2s; 
+}
+
+#addBox {
+	background-color: rgba(255,255,255,.3);
 }
 
 #addBox input {
@@ -221,5 +228,52 @@ form {
 
 #addBox .button:active {
 	background-color: white;
+}
 
+#userOverlay {
+	width: 100%;
+}
+
+#transferButton {
+	display: inline-block;
+	padding: 3pt;
+	background-color: white; 
+}
+
+#transferButton:hover {
+	background-color: #14BDFF;
+}
+
+#transferInput {
+	display: inline-block;
+	padding: 5pt;
+	width: 10%;
+	margin-left: 39%;
+	border: none;
+	margin-right: 1pt;
+}
+
+#choreOverlay{
+	width: 100%;
+}
+
+#choreFinish {
+	display: inline-block;
+	margin: 0px 5pt;
+	padding: 3pt;
+	background-color: #14BDFF; 
+}
+
+#makePublic {
+	display: inline-block;
+	margin: 0px 5pt;
+	padding: 3pt;
+	background-color: #14BDFF; 
+}
+
+#makeBid {
+	display: inline-block;
+	margin: 0px 5pt;
+	padding: 3pt;
+	background-color: #14BDFF; 
 }
