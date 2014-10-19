@@ -68,11 +68,11 @@
 			return false;
 		});
 		$('#addPubJob').click(function(){
-			socket.emit('addPubJob',false,groupid,$('#jobname').value,user,$('jobdesc'), $('jobPoints'));
+			socket.emit('addPublicJob',groupid,0,$('#jobname').val(),"",$('#jobdesc').val(), $('#jobPoints').val());
 			return false;
 		});
 		$('#addPrivJob').click(function(){
-			socket.emit('addPubJob',true,groupid,$('#jobname').value,user,$('jobdesc'), $('jobPoints'));
+			socket.emit('addPrivateJob',groupid,0,$('#jobname').val(),username,$('#jobdesc').val(), $('#jobPoints').val());
 			return false;
 		});
 		$(document).on('click', '.user',function(){
@@ -139,7 +139,7 @@
 		  	}
 		  });
 
-		  socket.on('viewLeaderboard', function(title, user, points){
+		  socket.on('viewLeaderboard', function(user, points){
 			
 			$('#content').append("<div class='user'><div style='width: 60%; display: inline-block' class='userName'>" + user + "</div><span class='userPoints'>" + points + "</span></div>");
 		  });
@@ -154,7 +154,6 @@
 		  socket.on('clearList', function(){
 			$('#publics').empty();
 		  	$('#privates').empty();
-
 		  });
 		</script>
 	</body>
