@@ -6,7 +6,7 @@ var collections = ["chores", "users"];
 var db = require("mongojs").connect(databaseUrl, collections);
 var currentIDIndex = 0;
 var accountSid = '[SID]'; //Change to run
-var authToken = '[authToken]';  //Change to run
+var authToken = '[Auth]';  //Change to run
 var client = require('twilio')(accountSid, authToken); 
 
 
@@ -28,7 +28,7 @@ io.on('connection', function(socket){
 	socket.on('submitBidJob', function(name, description, points){submitBidJob(socket, name, description, points);});
 	socket.on('transferPoints', function(first, second, points){transferPoints(socket, first, second, points);});
 	socket.on('bid', function(user, job, points){bid(socket, user, job, points);});
-	socket.on('complete', function(job){complete(socket, job);});
+	socket.on('complete', function(job, user){complete(socket, job, user);});
 	socket.on('verify', function(job, user){verify(socket, job, user);});
 });
 
@@ -175,27 +175,28 @@ function bid(socket, user, job, points) {
 }
 
 function complete(socket, job, user) {
+	console.log(user + ' completed ' + job);
 	db.chores.update({ID: job}, {$set: {isDone: true}});
 	db.chores.update({ID: job}, {$set: {isVerifying: true}});
 	db.chores.update({ID: job}, {$set: {user: user}});
-	console.log(user + ' completed ' + job);
 	socket.emit('complete');
+	var u;
 	var choreName;
 	db.chores.find({ID: job}, function(err, chores) {
 		if (err || !chores) {
 			console.log("Job not found");
 		} else chores.forEach( function(chore) {
-			console.log("Job found");
+		
 			choreName =  chore.name;
-			console.log(choreName);
-
-			client.messages.create({ 
-				to: "XXXXXXXXXX", 
-				from: "+XXXXXXXXXX", 
-				body: "You have been assigned Chore "+ choreName,   
-			}, function(err, message) { 
-				console.log(message.sid); 
-			});
+			if(user.length === 10){
+				client.messages.create({ 
+					to: "" + user, 
+					from: "+19782227045", 
+					body: "Thank you for completing Chore "+ choreName,   
+				}, function(err, message) { 
+					console.log(message.sid); 
+				});
+			}
 		});
 	});
 }
