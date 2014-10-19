@@ -93,11 +93,17 @@ form {
 			<input id="jobname" placeholder="Job Name"/>
 			<input id="jobuser" placeholder="Job User"/>
 			<input id="jobdesc" placeholder="Job Description"/>
-			<form id="debug" action=""><button>Debug</button></form>
 			<form id="addPubJob" action=""><button>Add Public job</button></form>
 			<form id="addPriJob" action=""><button>Add Private Job</button></form>
 			<br>
+			<form id="transfer" action="">
+				<input id="firstu" placeholder="User 1"/>
+				<input id="secondu" placeholder="User 2"/>
+				<button>Transfer Points</button>
+			</form>
+			<br>
 			<form id="movePrivate" action=""><button>Move Private Job</button></form>
+			<form id="verify" action=""><button>Verify</button></form>
 			<div id="header">Chore Board</div>
 			<ul class="menu" id="section"></ul>
 			<div id="content">
@@ -125,8 +131,6 @@ form {
 			socket.emit('login', $('#user').val(), $('#pass').val(), 0);
 			return false;
 		  });
-		  $('#debug').submit(function(){
-			socket.emit('movePrivate', 0, 5, "ab");
 		  $('#movePrivate').submit(function(){
 			socket.emit('movePrivate', 0, 10, 'graham');
 			return false;
@@ -137,6 +141,14 @@ form {
 		  });
 		  $('#addPubJob').submit(function(){
 			socket.emit('addPublicJob', 0, $('#jobid').val(), $('#jobname').val(), $('#jobuser').val(), $('#jobdesc').val(), 10);
+			return false;
+		  });
+		  $('#transfer').submit(function(){
+			socket.emit('transferPoints', $('#firstu').val(), $('#secondu').val(), 10);
+			return false;
+		  });
+		  $('#verify').submit(function(){
+			socket.emit('verify', 0, 'graham');
 			return false;
 		  });
 		  socket.on('setSection', function(title){
