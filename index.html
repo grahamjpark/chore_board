@@ -27,9 +27,6 @@
 			</ul>
 			<div id="content">
 				<div class="chore" id="XXXXXX">
-					<div class="ChoreOverlay">
-						<div 
-					</div>
 
 					<div style="width: 70%; display: inline-block">
 						<span class="choreName" id="XXXXXXname">"MOP THE DISHES"</span>
@@ -44,6 +41,13 @@
 						EXAMPLEMAN
 					</div>
 					<span class="userPoints" id="pointsXXXXXX">"150"</span>
+				</div>
+
+				<div class="user" id="YYYYYY">
+					<div style="width: 60%; display: inline-block" class="userName" id="nameYYYYYY">
+						EXAMPLEMAN
+					</div>
+					<span class="userPoints" id="pointsYYYYYY">"150"</span>
 				</div>
 				
 				<div id="addBox">
@@ -74,7 +78,18 @@
 			socket.emit('addPubJob',true,groupid,$('#jobname').value,user,$('jobdesc'), $('jobPoints'));
 			return false;
 		});
+		$(document).on('click', '.user',function(){
+			$("#choreOverlay").remove();
+			$("<div id='choreOverlay'><input id='transferInput' placeholder='Points' /><div id='transferButton'>Transfer</div></div>").appendTo(this).hide().slideDown();
+		});
 
+		$(document).on('click','#transferInput',function(evt){
+			evt.stopPropagation();
+		});
+
+		$(document).on('click','#transferButton',function(evt){
+			evt.stopPropagation();
+		});
 		  var socket = io();
 		  $('#viewJobs').click(function(){
 			socket.emit('viewJobs', true);
