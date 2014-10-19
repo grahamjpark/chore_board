@@ -32,11 +32,12 @@ io.on('connection', function(socket){
 //use the following to send things back to the index
 //io.emit('<functionname>', '<information>');
 
-function addJob(isPublic, group, id, jobName, username, desc, value) {
+function addJob(clientID, isPublic, group, id, jobName, username, desc, value) {
 	var p = db.chores;
 	p.save({groupID: parseInt(group), ID: parseInt(id), name: jobName, user: username, description: desc, points: parseInt(value), isVerifying: false, isDone: false, isPublic: isPublic}, function(err, saved) {
 		if( err || !saved ) console.log("Job not saved");
 		else {
+			io.emit('addJob', clientID);
 			console.log("Job saved");
 		}
 	});
@@ -80,7 +81,7 @@ function login(clientID, user, pass, group) {
 	});
 }
 
-function viewJobs(isPublic) {
+function viewJobs(clientID, isPublic) {
 	//view jobs (special | chores) [get jobs from db]
 	io.emit('clearList');
 	io.emit('setSection', isPublic ? 'Public' : 'Private');
@@ -89,6 +90,7 @@ function viewJobs(isPublic) {
 			io.emit('addList', "No chores found");
 			console.log("No chores found");
 		} else chores.forEach( function(chore) {
+			io.emit('viewJobs', clientID);
 			io.emit('addList', chore.name + ': ' + chore.description);
 			console.log(chore.name + ': ' + chore.description);
 		});

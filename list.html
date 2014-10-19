@@ -114,41 +114,42 @@ form {
 		<script src="/socket.io/socket.io.js"></script>
     	<script src="http://code.jquery.com/jquery-1.11.1.js"></script>
 		<script>
+		  var clientID = 0;
 		  var socket = io();
 		  $('#viewPublicJobs').submit(function(){
-			socket.emit('viewJobs', true);
+			socket.emit('viewJobs', clientID, true);
 			return false;
 		  });
 		  $('#viewPrivateJobs').submit(function(){
-			socket.emit('viewJobs', false);
+			socket.emit('viewJobs', clientID, false);
 			return false;
 		  });
 		  $('#viewLeaderboard').submit(function(){
-			socket.emit('viewLeaderboard');
+			socket.emit('viewLeaderboard', clientID);
 			return false;
 		  });
 		  $('#register').submit(function(){
-			socket.emit('login', $('#user').val(), $('#pass').val(), 0);
+			socket.emit('login',  clientID,$('#user').val(), $('#pass').val(), 0);
 			return false;
 		  });
 		  $('#movePrivate').submit(function(){
-			socket.emit('movePrivate', 0, 10, 'graham');
+			socket.emit('movePrivate', clientID, 0, 10, 'graham');
 			return false;
 		  });
 		  $('#addPriJob').submit(function(){
-			socket.emit('addPrivateJob', 0, $('#jobid').val(), $('#jobname').val(), $('#jobuser').val(), $('#jobdesc').val(), 10);
+			socket.emit('addPrivateJob', clientID, 0, $('#jobid').val(), $('#jobname').val(), $('#jobuser').val(), $('#jobdesc').val(), 10);
 			return false;
 		  });
 		  $('#addPubJob').submit(function(){
-			socket.emit('addPublicJob', 0, $('#jobid').val(), $('#jobname').val(), $('#jobuser').val(), $('#jobdesc').val(), 10);
+			socket.emit('addPublicJob', clientID, 0, $('#jobid').val(), $('#jobname').val(), $('#jobuser').val(), $('#jobdesc').val(), 10);
 			return false;
 		  });
 		  $('#transfer').submit(function(){
-			socket.emit('transferPoints', $('#firstu').val(), $('#secondu').val(), 10);
+			socket.emit('transferPoints', clientID, $('#firstu').val(), $('#secondu').val(), 10);
 			return false;
 		  });
 		  $('#verify').submit(function(){
-			socket.emit('verify', 0, 'graham');
+			socket.emit('verify', clientID, 0, 'graham');
 			return false;
 		  });
 		  socket.on('setSection', function(title){
