@@ -4,6 +4,7 @@ var io = require('socket.io')(http);
 var databaseUrl = "data";
 var collections = ["chores", "users"];
 var db = require("mongojs").connect(databaseUrl, collections);
+var currentIDIndex = 0;
 
 app.use(require('express').static(__dirname +'/public'));
 
@@ -147,6 +148,8 @@ function movePrivate(clientID, job, bounty, user) {
 
 function submitBidJob(clientID, name, description, points) {
 	//submit special jobs (?) [add special job to db]
+	addJob(true, 0, currentIDIndex, name, "", description, points);
+	currentIDIndex++;
 	console.log('submit bid job ' + name + ',' + description + ',' + points);
 }
 
