@@ -5,6 +5,7 @@
   "dependencies": {
     "express": "^4.9.8",
     "mongojs": "^0.15.1",
-    "socket.io": "^1.0.2"
+    "socket.io": "^1.0.2",
+    "twilio": "^1.7.0"
   }
 }

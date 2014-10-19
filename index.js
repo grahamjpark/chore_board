@@ -5,6 +5,10 @@ var databaseUrl = "data";
 var collections = ["chores", "users"];
 var db = require("mongojs").connect(databaseUrl, collections);
 var currentIDIndex = 0;
+var accountSid = '[SID]'; //Change to run
+var authToken = '[authToken]';  //Change to run
+var client = require('twilio')(accountSid, authToken); 
+
 
 app.use(require('express').static(__dirname +'/public'));
 
@@ -176,6 +180,24 @@ function complete(socket, job, user) {
 	db.chores.update({ID: job}, {$set: {user: user}});
 	console.log(user + ' completed ' + job);
 	socket.emit('complete');
+	var choreName;
+	db.chores.find({ID: job}, function(err, chores) {
+		if (err || !chores) {
+			console.log("Job not found");
+		} else chores.forEach( function(chore) {
+			console.log("Job found");
+			choreName =  chore.name;
+			console.log(choreName);
+
+			client.messages.create({ 
+				to: "XXXXXXXXXX", 
+				from: "+XXXXXXXXXX", 
+				body: "You have been assigned Chore "+ choreName,   
+			}, function(err, message) { 
+				console.log(message.sid); 
+			});
+		});
+	});
 }
 
 function verify(socket, job, user) {
@@ -200,5 +222,5 @@ function verify(socket, job, user) {
 //}
 
 http.listen(3000, function(){
-  console.log('listening on *:3000');
+  console.log('Starting Chore-board on *:3000');
 });
