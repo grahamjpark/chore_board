@@ -117,44 +117,51 @@ form {
 		  var clientID = 0;
 		  var socket = io();
 		  $('#viewPublicJobs').submit(function(){
-			socket.emit('viewJobs', clientID, true);
+			socket.emit('viewJobs', true);
 			return false;
 		  });
 		  $('#viewPrivateJobs').submit(function(){
-			socket.emit('viewJobs', clientID, false);
+			socket.emit('viewJobs', false);
 			return false;
 		  });
 		  $('#viewLeaderboard').submit(function(){
-			socket.emit('viewLeaderboard', clientID);
+			socket.emit('viewLeaderboard');
 			return false;
 		  });
 		  $('#register').submit(function(){
-			socket.emit('login',  clientID,$('#user').val(), $('#pass').val(), 0);
+			socket.emit('login', $('#user').val(), $('#pass').val(), 0);
 			return false;
 		  });
 		  $('#movePrivate').submit(function(){
-			socket.emit('movePrivate', clientID, 0, 10, 'graham');
+			socket.emit('movePrivate', 0, 10, 'graham');
 			return false;
 		  });
 		  $('#addPriJob').submit(function(){
-			socket.emit('addPrivateJob', clientID, 0, $('#jobid').val(), $('#jobname').val(), $('#jobuser').val(), $('#jobdesc').val(), 10);
+			socket.emit('addPrivateJob', 0, $('#jobid').val(), $('#jobname').val(), $('#jobuser').val(), $('#jobdesc').val(), 10);
 			return false;
 		  });
 		  $('#addPubJob').submit(function(){
-			socket.emit('addPublicJob', clientID, 0, $('#jobid').val(), $('#jobname').val(), $('#jobuser').val(), $('#jobdesc').val(), 10);
+			socket.emit('addPublicJob', 0, $('#jobid').val(), $('#jobname').val(), $('#jobuser').val(), $('#jobdesc').val(), 10);
 			return false;
 		  });
 		  $('#transfer').submit(function(){
-			socket.emit('transferPoints', clientID, $('#firstu').val(), $('#secondu').val(), 10);
+			socket.emit('transferPoints', $('#firstu').val(), $('#secondu').val(), 10);
 			return false;
 		  });
 		  $('#verify').submit(function(){
-			socket.emit('verify', clientID, 0, 'graham');
+			socket.emit('verify', 0, 'graham');
 			return false;
 		  });
 		  socket.on('setSection', function(title){
 			$('#section').empty();
 			$('#section').append($('<li>').text(title));
+		  });
+		  socket.on('viewJobs', function(name, description, points, isDone) {
+		  	$('#list').append(name + ': ' + description + '<br>');
+		  });
+		  socket.on('viewLeaderboard', function(name, points) {
+		  	
+		  	$('#list').append(name + ': ' + points + '<br>');
 		  });
 		  socket.on('addList', function(element){
 			$('#list').append(element + '<br>');
