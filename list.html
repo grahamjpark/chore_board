@@ -104,6 +104,8 @@ form {
 			<br>
 			<form id="movePrivate" action=""><button>Move Private Job</button></form>
 			<form id="verify" action=""><button>Verify</button></form>
+			<form id="complete" action=""><button>complete</button></form>
+
 			<div id="header">Chore Board</div>
 			<ul class="menu" id="section"></ul>
 			<div id="content">
@@ -150,6 +152,10 @@ form {
 		  });
 		  $('#verify').submit(function(){
 			socket.emit('verify', clientID, 0, 'graham');
+			return false;
+		  });
+		  $('#complete').submit(function(){
+			socket.emit('complete', clientID, 0, 'tim');
 			return false;
 		  });
 		  socket.on('setSection', function(title){
