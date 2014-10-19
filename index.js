@@ -186,16 +186,19 @@ function complete(socket, job, user) {
 		if (err || !chores) {
 			console.log("Job not found");
 		} else chores.forEach( function(chore) {
-		
+
 			choreName =  chore.name;
-			if(user.length === 10){
+			if(parseInt(user).toString().length === 10){
 				client.messages.create({ 
 					to: "" + user, 
 					from: "+19782227045", 
-					body: "Thank you for completing Chore "+ choreName,   
+					body: "Thank you for completing chore "+ choreName,   
 				}, function(err, message) { 
 					console.log(message.sid); 
 				});
+			}
+			else {
+				console.log("Invalid phone number")
 			}
 		});
 	});
