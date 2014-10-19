@@ -22,7 +22,7 @@ io.on('connection', function(socket){
 	socket.on('movePrivate', function(job, bounty, user){movePrivate(job, bounty, user);});
 	socket.on('submitBidJob', function(name, description, points){submitBidJob(name, description, points);});
 	socket.on('transferPoints', function(first, second, points){transferPoints(first, second, points);});
-	socket.on('bid', function(job, points){bid(job, points);});
+	socket.on('bid', function(user, job, points){bid(user, job, points);});
 	socket.on('complete', function(job){complete(job);});
 	socket.on('verify', function(job, user){verify(job, user);});
 });
@@ -155,43 +155,17 @@ function transferPoints(first, second, points) {
 	console.log('transfer ' + points + ' points from ' + first + ' to ' + second);
 }
 
-function bid(job, points) {
-	//TODO
-	//THIS IS CONCEPTUAL AND NEEDS TO BE REFINED AND TESTED
-	//TODO: Test and update with current field names
-	//bid to special job
-	db.publicChores.find({ID: job}, function(err, chore) {
-		if( err || !publicChores) {
-			io.emit('addList', "Job not found");
-			console.log("Job not found");
-		} else privateChores.forEach( function(chore) {
-				chore.points = chore.points + points;
-		});
-	});
-	console.log('bid ' + points + ' points to ' + job);
+function bid(user, job, points) {
+	db.chores.update({ID: job}, {$inc: {points: points}});
+	db.users.update({username: user}, {$inc: {points: -points}});
+	console.log(user + ' bid ' + points + ' points to ' + job);
 }
 
 function complete(job, user) {
-	//TODO
-	//THIS IS CONCEPTUAL AND NEEDS TO BE REFINED AND TESTED
-	//complete special jobs [set job.isVerifying]
-	db.users.find({username : user}, function(err, worker) {
-		if( err || !users) {
-				io.emit('addList', "User not found");
-				console.log("User not found");
-			} else privateChores.forEach( function(chore) {
-				db.publicChores.find({ID: job}, function(err, users) {
-					if( err || !publicChores) {
-						io.emit('addList', "Job not found");
-						console.log("Job not found");
-					} else privateChores.forEach( function(chore) {
-						worker.points += chore.points;
-					});
-				});
-			});
-		});
-	
-	console.log('complete ' + job);
+	db.chores.update({ID: job}, {$set: {isDone: true}});
+	db.chores.update({ID: job}, {$set: {isVerifying: true}});
+	db.chores.update({ID: job}, {$set: {user: user}});
+	console.log(user + ' completed ' + job);
 }
 
 function verify(job, user) {
