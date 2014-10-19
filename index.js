@@ -78,6 +78,7 @@ function login(socket, user, pass, group) {
 			//io.emit('addList', user.name + ': ' + user.description);
 			if (user.password == pass) {
 				console.log("Logging in " + group + ":" + user.username + "," + pass);
+				socket.emit('login');
 			} else {
 				console.log("Incorrect password/username combination");
 			}
@@ -94,7 +95,7 @@ function viewJobs(socket, isPublic) {
 			socket.emit('addList', "No chores found");
 			console.log("No chores found");
 		} else chores.forEach( function(chore) {
-			socket.emit('viewJobs', chore.name, chore.description, chore.points, chore.isDone, isPublic); //TODO:
+			socket.emit('viewJobs', chore.name, chore.description, chore.points, chore.isDone, isPublic, chore.ID); //TODO:
 			//socket.emit('addList', chore.name + ': ' + chore.description);
 			console.log(chore.name + ': ' + chore.description);
 		});

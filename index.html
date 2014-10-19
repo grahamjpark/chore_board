@@ -13,7 +13,8 @@
 		}
 
 		function goodLogin(){
-			username = $('#user').value;
+			username = $('#user').val();
+			console.log(username);
 			$('loginBar').html = "Welcome, " + username;
 		}
 
@@ -86,6 +87,8 @@
 
 		$(document).on('click','#transferButton',function(evt){
 			evt.stopPropagation();
+			console.log($('#transferButton').parent().parent().attr('id'));
+			socket.emit('transferPoints', username, $('#transferButton').parent().parent().attr('id').trim(), $('#transferInput').val());
 		});
 
 		$(document).on('click', '.chore',function(){
@@ -107,10 +110,14 @@
 
 		$(document).on('click','#makePublic',function(evt){
 			evt.stopPropagation();
+
 		});
 
 		$(document).on('click','#choreFinish',function(evt){
 			evt.stopPropagation();
+			socket.emit('complete', $('#choreFinish').parent().parent().attr("id"), username);
+			socket.emit('verify', $('#choreFinish').parent().parent().attr("id"), username);
+
 		});
 		  var socket = io();
 		  $('#viewJobs').click(function(){
@@ -128,20 +135,20 @@
 			socket.emit('login', $('#user').val(), $('#pass').val(), 0);
 			return false;
 		  });
-		  socket.on('viewJobs', function(name, description, points, isDone, isPublic) {
+		  socket.on('viewJobs', function(name, description, points, isDone, isPublic, jobID) {
 		  	if(!isDone){
 		  		if(isPublic){
-		  			$('#publics').append("<div class='chore' id='XXXXXX'><div style='width: 70%; display: inline-block'><span class='choreName'>" + name + "</span><span class='choreDesc'>" + description + "</span></div><span class='chorePoints'>" + points + "</span></div>");
+		  			$('#publics').append("<div class='chore' id='" + jobID + "'><div style='width: 70%; display: inline-block'><span class='choreName'>" + name + "</span><span class='choreDesc'>" + description + "</span></div><span class='chorePoints'>" + points + "</span></div>");
 		  		}
 		  		else{
-		  			$('#privates').append("<div class='chore' id='XXXXXX'><div style='width: 70%; display: inline-block'><span class='choreName'>" + name + "</span><span class='choreDesc'>" + description + "</span></div><span class='chorePoints'>" + points + "</span></div>");
+		  			$('#privates').append("<div class='chore' id='" + jobID + "'><div style='width: 70%; display: inline-block'><span class='choreName'>" + name + "</span><span class='choreDesc'>" + description + "</span></div><span class='chorePoints'>" + points + "</span></div>");
 		  		}
 		  	}
 		  });
 
 		  socket.on('viewLeaderboard', function(user, points){
 			
-			$('#content').append("<div class='user'><div style='width: 60%; display: inline-block' class='userName'>" + user + "</div><span class='userPoints'>" + points + "</span></div>");
+			$('#content').append("<div class='user' id='" + user + "'><div style='width: 60%; display: inline-block' class='userName'>" + user + "</div><span class='userPoints'>" + points + "</span></div>");
 		  });
 
 		  socket.on('setSection', function(title){
@@ -155,6 +162,10 @@
 			$('#publics').empty();
 		  	$('#privates').empty();
 		  });
+		  socket.on('login', function(){
+		  	goodLogin();
+		  	console.log("logged in")
+		  })
 		</script>
 	</body>
 </html>
