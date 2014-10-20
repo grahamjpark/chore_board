@@ -14,3 +14,17 @@ Within the private chores catagory, users will find their typical chores that ne
 Within the public chores catagory, users will find two different types of chore. 
 - The first type are chores that don't need to be done on a regular basis and benifit the entire group. Users will see this chore and -depending on how much they don't want to do it and how urgently they think it needs to be done- will add points to the jackpot that someone will recieve upon completing the chore.
 - The second type of chore are chores that originally started out as private, but the original owner was not able to complete. The owner would submit the chore to the public section and add a bounty of points someone would get for completing the chore.
+
+
+
+###Planning
+####Future Features
+- [ ] Chores that rotate
+- [ ] Nudge people anonymously
+- [x] Transfer points between users
+- [ ] Social integration 
+
+####Things needing implementation
+- [ ] Creating new groups
+- [ ] Functioning login (possibly using social)
+- [ ] Bring together final backend and frontend
